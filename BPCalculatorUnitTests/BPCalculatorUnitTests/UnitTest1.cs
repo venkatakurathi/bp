@@ -1,106 +1,169 @@
-using BPCalculator;
 using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Hosting;
+using BPCalculator;
+using BPCalculator.Pages;
 
-[TestClass]
-public class BPCalcuatorUnitTests
+namespace BPCalculator.Tests
 {
-    [TestMethod]
-    public void Category_LowBloodPressure()
+    [TestClass]
+    public class BloodPressureTests
     {
-        // Arrange
-        BloodPressure bloodPressure = new BloodPressure
+
+        [TestMethod]
+        public void TestLowBloodPressures()
         {
-            Systolic = 80,
-            Diastolic = 50
-        };
+            Random random = new();
+            // Arrange
+            var bloodPressure = new BloodPressure
+            {
+                Systolic = random.Next(70, 89),
+                Diastolic = random.Next(40, 59)
+            };
 
-        // Act
-        BPCategory category = bloodPressure.Category;
+            // Act
+            var category = bloodPressure.Category;
 
-        // Assert
-        Assert.AreEqual(BPCategory.Low, category);
-    }
+            // Assert
+            Assert.AreEqual(BPCategory.Low, category);
+        }
 
-    [TestMethod]
-    public void Category_IdealBloodPressure()
-    {
-        // Arrange
-        BloodPressure bloodPressure = new BloodPressure
+        [TestMethod]
+        public void TestIdealBloodPressures()
         {
-            Systolic = 110,
-            Diastolic = 70
-        };
+            Random random = new();
+            // Arrange
+            var bloodPressure = new BloodPressure
+            {
+                Systolic = random.Next(90, 119),
+                Diastolic = random.Next(60, 79)
+            };
 
-        // Act
-        BPCategory category = bloodPressure.Category;
+            // Act
+            var category = bloodPressure.Category;
 
-        // Assert
-        Assert.AreEqual(BPCategory.Ideal, category);
-    }
+            // Assert
+            Assert.AreEqual(BPCategory.Ideal, category);
+        }
 
-    [TestMethod]
-    public void Category_PreHighBloodPressure()
-    {
-        // Arrange
-        BloodPressure bloodPressure = new BloodPressure
+        [TestMethod]
+        public void TestPreHighBloodPressure()
         {
-            Systolic = 130,
-            Diastolic = 85
-        };
+            Random random = new();
+            // Arrange
+            var bloodPressure = new BloodPressure
+            {
+                Systolic = random.Next(120, 139),
+                Diastolic = random.Next(80, 89)
+            };
 
-        // Act
-        BPCategory category = bloodPressure.Category;
+            // Act
+            var category = bloodPressure.Category;
 
-        // Assert
-        Assert.AreEqual(BPCategory.PreHigh, category);
-    }
+            // Assert
+            Assert.AreEqual(BPCategory.PreHigh, category);
+        }
 
-    [TestMethod]
-    public void Category_HighBloodPressure()
-    {
-        // Arrange
-        BloodPressure bloodPressure = new BloodPressure
+        [TestMethod]
+        public void TestHighBloodPressure()
         {
-            Systolic = 150,
-            Diastolic = 95
-        };
+            Random random = new();
+            // Arrange
+            var bloodPressure = new BloodPressure
+            {
+                Systolic = random.Next(140, 190),
+                Diastolic = random.Next(90, 100)
+            };
 
-        // Act
-        BPCategory category = bloodPressure.Category;
+            // Act
+            var category = bloodPressure.Category;
 
-        // Assert
-        Assert.AreEqual(BPCategory.High, category);
-    }
+            // Assert
+            Assert.AreEqual(BPCategory.High, category);
+        }
 
-    [TestMethod]
-    [ExpectedException(typeof(ValidationException), "Invalid Systolic Value")]
-    public void InvalidSystolicValue()
-    {
-        // Arrange
-        BloodPressure bloodPressure = new BloodPressure
+        [TestMethod]
+        public void TestInvalidSystolicValue()
         {
-            Systolic = 200,
-            Diastolic = 70
-        };
+            // Arrange
+            var bloodPressure = new BloodPressure
+            {
+                Systolic = 200,
+                Diastolic = 80
+            };
 
-        // Act
-        // ValidationException is expected to be thrown
-        BPCategory category = bloodPressure.Category;
-    }
+            // Act & Assert
+            var validationResults = ValidateModel(bloodPressure);
+            Assert.IsTrue(validationResults.Count > 0);
+            Assert.AreEqual("Invalid Systolic Value", validationResults[0].ErrorMessage);
+        }
 
-    [TestMethod]
-    [ExpectedException(typeof(ValidationException), "Invalid Diastolic Value")]
-    public void InvalidDiastolicValue()
-    {
-        // Arrange
-        BloodPressure bloodPressure = new BloodPressure
+        [TestMethod]
+        public void SystolicAlwaysGreater()
         {
-            Systolic = 120,
-            Diastolic = 110
-        };
+            var bloodPressure = new BloodPressure
+            {
+                Systolic = 30,
+                Diastolic = 50
+            };
+            var validationResults = ValidateModel(bloodPressure);
+            Assert.IsTrue(validationResults.Count > 0);
+            Assert.AreEqual("Invalid Systolic Value", validationResults[0].ErrorMessage);
+        }
 
-        // Act
-        // ValidationException is expected to be thrown
-        BPCategory category = bloodPressure.Category;
+        [TestMethod]
+        public void TestInvalidDiastolicValue()
+        {
+            // Arrange
+            var bloodPressure = new BloodPressure
+            {
+                Systolic = 120,
+                Diastolic = 110
+            };
+
+            // Act & Assert
+            var validationResults = ValidateModel(bloodPressure);
+            Assert.IsTrue(validationResults.Count > 0);
+            Assert.AreEqual("Invalid Diastolic Value", validationResults[0].ErrorMessage);
+        }
+
+        private static List<ValidationResult> ValidateModel(object model)
+        {
+            var context = new ValidationContext(model, serviceProvider: null, items: null);
+            var results = new List<ValidationResult>();
+
+            Validator.TryValidateObject(model, context, results, true);
+            return results;
+        }
+
+        [TestMethod]
+        public void OnPost_ValidInput_ShouldReturnValidCategory()
+        {
+            // Arrange
+            BloodPressureModel bloodPressureModel = new()
+            {
+                BP = new BloodPressure { Systolic = 120, Diastolic = 80 }
+            }; // Use default constructor
+
+            // Act
+            IActionResult result = bloodPressureModel.OnPost();
+
+            // Assert
+            Assert.IsInstanceOfType(result, typeof(PageResult));
+            Assert.AreEqual(BPCategory.PreHigh, bloodPressureModel.BP.Category);
+        }
+
+        [TestMethod]
+        public void CreateHostBuilder_ShouldReturnIHostBuilder()
+        {
+            // Act
+            var hostBuilder = Program.CreateHostBuilder(null);
+
+            // Assert
+            Assert.IsNotNull(hostBuilder);
+            Assert.IsInstanceOfType(hostBuilder, typeof(IHostBuilder));
+        }
+
     }
 }

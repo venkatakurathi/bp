@@ -10,6 +10,7 @@ namespace BPCalculator.Pages
 {
     public class PrivacyModel : PageModel
     {
+        #pragma warning disable IDE0052
         private readonly ILogger<PrivacyModel> _logger;
 
         public PrivacyModel(ILogger<PrivacyModel> logger)

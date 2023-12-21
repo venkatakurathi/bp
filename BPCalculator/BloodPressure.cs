@@ -4,6 +4,9 @@ using Microsoft.ApplicationInsights;
 using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.ApplicationInsights.DataContracts;
 using System.Collections.Generic;
+using System.Reflection;
+
+
 
 namespace BPCalculator
 {
@@ -21,7 +24,7 @@ namespace BPCalculator
         private const string InstrumentationKey = "Your-Instrumentation-Key";
 
         // Telemetry client
-        private static TelemetryClient telemetryClient;
+        private static readonly TelemetryClient telemetryClient;
 
         // Initialize telemetry client
         static BloodPressure()
@@ -61,7 +64,7 @@ namespace BPCalculator
 
         private BPCategory CalculateCategory()
         {
-            if (Systolic < 90 && Diastolic < 60)
+            if ((Systolic >=70 && Systolic < 90) && (Diastolic>=40 && Diastolic < 60))
             {
                 return BPCategory.Low;
             }
@@ -69,11 +72,11 @@ namespace BPCalculator
             {
                 return BPCategory.Ideal;
             }
-            else if ((Systolic >= 120 && Systolic < 140) || (Diastolic >= 80 && Diastolic < 90))
+            else if ((Systolic >= 120 && Systolic < 140) && (Diastolic >= 80 && Diastolic < 90))
             {
                 return BPCategory.PreHigh;
             }
-            else
+            else //((Systolic >=140 && Systolic <= 190 ) && (Diastolic >=90 && Diastolic <= 100))
             {
                 return BPCategory.High;
             }
