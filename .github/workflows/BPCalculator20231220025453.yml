@@ -1,5 +1,6 @@
 name: Build and deploy .NET Core application to Web App BPCalculator20231220025453
 on:
+  workflow_dispatch:
   push:
     branches:
     - master
@@ -40,6 +41,10 @@ jobs:
       with:
         name: webapp
         path: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
+    - name: AzureLogin
+      uses: azure/login@v1
+      with:
+        creds: ${{ secrests.AZURE_CREDENTIALS }}
     - name: Deploy to Azure WebApp
       uses: azure/webapps-deploy@v2
       with:
