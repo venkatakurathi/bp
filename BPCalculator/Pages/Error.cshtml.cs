@@ -16,8 +16,10 @@ namespace BPCalculator.Pages
 
         public bool ShowRequestId => !string.IsNullOrEmpty(RequestId);
 
+        #pragma warning disable IDE0052
         private readonly ILogger<ErrorModel> _logger;
-
+        
+        
         public ErrorModel(ILogger<ErrorModel> logger)
         {
             _logger = logger;
