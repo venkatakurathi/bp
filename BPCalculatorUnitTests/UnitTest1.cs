@@ -2,11 +2,16 @@ using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Hosting;
-using BPCalculator;
 using BPCalculator.Pages;
+using Microsoft.Extensions.Configuration;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Routing;
+using Moq;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace BPCalculator.Tests
-{
+{   
     [TestClass]
     public class BloodPressureTests
     {
@@ -86,11 +91,12 @@ namespace BPCalculator.Tests
         [TestMethod]
         public void TestInvalidSystolicValue()
         {
+            Random random = new();
             // Arrange
             var bloodPressure = new BloodPressure
             {
-                Systolic = 200,
-                Diastolic = 80
+                Systolic = random.Next(70,190) + 121,
+                Diastolic = random.Next(40,100)
             };
 
             // Act & Assert
@@ -115,11 +121,13 @@ namespace BPCalculator.Tests
         [TestMethod]
         public void TestInvalidDiastolicValue()
         {
+            Random random = new();
+
             // Arrange
             var bloodPressure = new BloodPressure
             {
-                Systolic = 120,
-                Diastolic = 110
+                Systolic = random.Next(70, 190),
+                Diastolic = random.Next(40, 100) + 61
             };
 
             // Act & Assert

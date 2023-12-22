@@ -16,8 +16,7 @@ namespace BPCalculator
         [Display(Name = "Low Blood Pressure")] Low,
         [Display(Name = "Ideal Blood Pressure")] Ideal,
         [Display(Name = "Pre-High Blood Pressure")] PreHigh,
-        [Display(Name = "High Blood Pressure")] High,
-        [Display(Name = "Invalid Blood Pressure values")] Invalid
+        [Display(Name = "High Blood Pressure")] High
 
     };
 
@@ -64,30 +63,22 @@ namespace BPCalculator
             }
         }
 
-        public class InvalidBloodPressureException : Exception
-        {
-            public InvalidBloodPressureException() : base("Invalid blood pressure values.")
-            {
-            }
-        }
 
         private BPCategory CalculateCategory()
         {
-            try
-            {
-                if (Systolic >= 70 && Systolic <= 89 && Diastolic >= 40 && Diastolic <= 59)
+            /*  if (Systolic >= 70 && Systolic <= 89 || Diastolic >= 40 && Diastolic <= 59)
                 {
                     return BPCategory.Low;
                 }
-                else if (Systolic >= 90 && Systolic <= 119 && Diastolic >= 60 && Diastolic <= 79)
+                else if (Systolic >= 90 && Systolic <= 119 || Diastolic >= 60 && Diastolic <= 79)
                 {
                     return BPCategory.Ideal;
                 }
-                else if (Systolic >= 120 && Systolic <= 139 && Diastolic >= 80 && Diastolic <= 89)
+                else if (Systolic >= 120 && Systolic <= 139 || Diastolic >= 80 && Diastolic <= 89)
                 {
                     return BPCategory.PreHigh;
                 }
-                else if (Systolic >= 140 && Systolic <= 190 && Diastolic >= 90 && Diastolic <= 100)
+                else if (Systolic >= 140 && Systolic <= 190 || Diastolic >= 90 && Diastolic <= 100)
                 {
                     return BPCategory.High;
                 }
@@ -96,10 +87,31 @@ namespace BPCalculator
                     // Indicate invalid values
                     return BPCategory.Invalid;
                 }
-            } catch(Exception) 
+            } 
+            catch(Exception) 
             {
                 return BPCategory.Invalid;
+            }*/
+
+
+            if (Systolic >= 140 || Diastolic >= 90)
+            {
+                // Either systolic or diastolic falls into "High" category
+                return BPCategory.High;
             }
+            else if (Systolic >= 120 || Diastolic >= 80)
+            {
+                return BPCategory.PreHigh;
+            }
+            else if ((Systolic <= 89 && Systolic <= 59) || !(Systolic >= 90 && Diastolic >= 60))
+            {
+                return BPCategory.Low;
+            }
+            else
+            {
+                return BPCategory.Ideal;
+            }
+
         }
 
         private void LogTelemetry(BPCategory category)
