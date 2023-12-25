@@ -38,7 +38,7 @@ jobs:
     needs: build
     steps:
     - name: Run Unit Tests
-      run: dotnet test .\BPCalculatorUnitTests\BPCalculatorUnitTests.csproj --logger "trx;LogFileName=.\TestResults\BPCalculatorUnitTests.trx"
+      run: dotnet test \BPCalculatorUnitTests\BPCalculatorUnitTests.csproj --logger "trx;LogFileName=.\BPCalculatorUnitTests\TestResults\BPCalculatorUnitTests.trx"
 
     - name: Publish Unit Test Results
       uses: EnricoMi/publish-unit-test-result-action/composite@v2
