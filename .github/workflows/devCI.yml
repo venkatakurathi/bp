@@ -23,21 +23,27 @@ jobs:
       run: dotnet restore "${{ env.WORKING_DIRECTORY }}"
     - name: Build
       run: dotnet build "${{ env.WORKING_DIRECTORY }}" --configuration ${{ env.CONFIGURATION }} --no-restore
-    - name: Test
-      run: dotnet test 
+  test:
+    runs-on: windows-latest
+    steps:
+    - name: run unit tests
+      run: dotnet test ".\BPCalculatorUnitTests\BPCalculatorUnitTests.csproj" --no-build
+    - name: Publish Test Results
+      uses: EnricoMi/publish-unit-test-result-action/composite@v2
+      if: always()
+      with:
+       files: |
+          Test-Results\BPCalculatorUnitTests.trx
+  publish:
+    runs-on: windows-latest
+    steps:
     - name: Publish
       run: dotnet publish "${{ env.WORKING_DIRECTORY }}" --configuration ${{ env.CONFIGURATION }} --no-build --output "${{ env.AZURE_WEBAPP_PACKAGE_PATH }}"
     - name: Publish Artifacts
       uses: actions/upload-artifact@v3
       with:
         name: webapp
-        path: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
-  test:
-    runs-on: windows-latest
-    steps:
-    - name: run unit tests
-      run: dotnet test "${{ env.WORKING_DIRECTORY }}\BPCalculatorUnitTests\BPCalculatorUnitTests.csproj" --no-build
-
+        path: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }
   deploy:
     runs-on: windows-latest
     needs: build
