@@ -29,8 +29,10 @@ jobs:
       uses: EnricoMi/publish-unit-test-result-action/composite@v2
       if: always()
       with:
-        files: |
+       files: |
           Test-Results\BPCalculatorUnitTests.trx
+  publish:
+    runs-on: windows-latest
     - name: Publish
       run: dotnet publish "${{ env.WORKING_DIRECTORY }}" --configuration ${{ env.CONFIGURATION }} --no-build --output "${{ env.AZURE_WEBAPP_PACKAGE_PATH }}"
     - name: Publish Artifacts
@@ -38,12 +40,6 @@ jobs:
       with:
         name: webapp
         path: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
-  test:
-    runs-on: windows-latest
-    steps:
-    - name: run unit tests
-      run: dotnet test "${{ env.WORKING_DIRECTORY }}\BPCalculatorUnitTests\BPCalculatorUnitTests.csproj" --no-build
-
   deploy:
     runs-on: windows-latest
     needs: build
