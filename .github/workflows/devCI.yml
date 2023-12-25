@@ -44,7 +44,7 @@ jobs:
 
   publish:
     runs-on: windows-latest
-    needs: test
+    needs: build
     steps:
       - name: Publish
         run: dotnet publish "${{ env.WORKING_DIRECTORY }}" --configuration ${{
