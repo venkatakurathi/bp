@@ -32,6 +32,12 @@ jobs:
       with:
         name: webapp
         path: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
+  test:
+    runs-on: windows-latest
+    steps:
+    - name: run unit tests
+      run: dotnet test "${{ env.WORKING_DIRECTORY }}\BPCalculatorUnitTests\BPCalculatorUnitTests.csproj" --no-build
+
   deploy:
     runs-on: windows-latest
     needs: build
