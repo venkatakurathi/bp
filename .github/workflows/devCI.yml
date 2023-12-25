@@ -32,7 +32,7 @@ jobs:
         run: dotnet build "${{ env.WORKING_DIRECTORY }}" --configuration ${{ env.CONFIGURATION }} --no-restore
 
       - name: Run Unit Tests
-        run: dotnet test ${{ env.WORKING_DIRECTORY }}\BPCalculatorUnitTests\BPCalculatorUnitTests.csproj --no-build --no-release--logger "trx;LogFileName=BPCalculatorUnitTests.trx"
+        run: dotnet test ${{ env.WORKING_DIRECTORY }}\BPCalculatorUnitTests\BPCalculatorUnitTests.csproj --no-build --no-release --logger "trx;LogFileName=BPCalculatorUnitTests.trx"
         
       - name: Publish Unit Test Results
         uses: EnricoMi/publish-unit-test-result-action/composite@v2
