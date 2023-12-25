@@ -25,6 +25,7 @@ jobs:
       run: dotnet build "${{ env.WORKING_DIRECTORY }}" --configuration ${{ env.CONFIGURATION }} --no-restore
   test:
     runs-on: windows-latest 
+    needs: build
     steps:
     - name: Run Unit Tests
       run: dotnet test .\BPCalculatorUnitTests\BPCalculatorUnitTests.csproj --logger "trx;LogFileName=.\TestResults\BPCalculatorUnitTests.trx"
