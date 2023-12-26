@@ -34,13 +34,13 @@ jobs:
       run: dotnet build "${{ env.WORKING_DIRECTORY }}" --configuration ${{ env.CONFIGURATION }} --no-restore
       
     - name: Run Unit Tests
-      run: dotnet test .\BPCalculatorUnitTests\BPCalculatorUnitTests.csproj --logger "trx;LogFileName=.\TestResults\BPCalculatorUnitTests.trx"
+      run: dotnet test .\BPCalculatorUnitTests\BPCalculatorUnitTests.csproj --logger "trx;LogFileName=.\TestResults\BPCalculatorUnitTests.trx" --collect "Code coverage" 
        
     - name: Run UAT Tests
-      run: dotnet test .\UATTests\UATTests.csproj --logger "trx;LogFileName=.\TestResults\UATTests.trx"
+      run: dotnet test .\UATTests\UATTests.csproj --logger "trx;LogFileName=.\TestResults\UATTests.trx" --collect "Code coverage" 
 
     - name: Run Selenium Tests
-      run: dotnet test .\SeleniumTests\SeleniumTests.csproj --logger "trx;LogFileName=.\TestResults\SeleniumTests.trx"
+      run: dotnet test .\SeleniumTests\SeleniumTests.csproj --logger "trx;LogFileName=.\TestResults\SeleniumTests.trx" --collect "Code coverage" 
 
     - name: Publish Unit Test Results
       uses: EnricoMi/publish-unit-test-result-action/composite@v2
