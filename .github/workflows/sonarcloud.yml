@@ -1,0 +1,32 @@
+name: SonarCloud Analysis
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up .NET
+        uses: actions/setup-dotnet@v2
+        with:
+          dotnet-version: '6.0.x'  # Adjust to the version you are using
+
+      - name: SonarCloud Scan
+        run: dotnet sonarscanner begin /k:"venkatakurathi_bp" /o:"venkatakurathi" /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
+      - name: Build and Test
+        run: dotnet build --configuration Release
+
+      - name: SonarCloud End
+        run: dotnet sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
