@@ -1,62 +1,81 @@
 name: Build and deploy .NET Core application to Web App BPCalculator20231220025453
+
 on:
   workflow_dispatch:
   push:
     branches:
     - development
+
 env:
   AZURE_WEBAPP_NAME: BPCalculator2023-VA
   AZURE_WEBAPP_PACKAGE_PATH: BPCalculator\published
   CONFIGURATION: Release
   DOTNET_CORE_VERSION: 6.0.x
   WORKING_DIRECTORY: BPCalculator
+
 jobs:
   build:
     runs-on: windows-latest
     steps:
-    - uses: actions/checkout@v4
+    - name: Checkout Repository
+      uses: actions/checkout@v4
+      with:
+        ref: development
+
     - name: Setup .NET SDK
       uses: actions/setup-dotnet@v3
       with:
         dotnet-version: ${{ env.DOTNET_CORE_VERSION }}
+
     - name: Restore
       run: dotnet restore "${{ env.WORKING_DIRECTORY }}"
+
     - name: Build
       run: dotnet build "${{ env.WORKING_DIRECTORY }}" --configuration ${{ env.CONFIGURATION }} --no-restore
-  test:
-    runs-on: windows-latest
-    steps:
-    - name: run unit tests
-      run: dotnet test ".\BPCalculatorUnitTests\BPCalculatorUnitTests.csproj" --no-build
-    - name: Publish Test Results
+      
+    - name: Run Unit Tests
+      run: dotnet test .\BPCalculatorUnitTests\BPCalculatorUnitTests.csproj --logger "trx;LogFileName=.\TestResults\BPCalculatorUnitTests.trx" --collect "Code coverage" 
+       
+    - name: Run UAT Tests
+      run: dotnet test .\UATTests\UATTests.csproj --logger "trx;LogFileName=.\TestResults\UATTests.trx" --collect "Code coverage" 
+
+    - name: Run Selenium Tests
+      run: dotnet test .\SeleniumTests\SeleniumTests.csproj --logger "trx;LogFileName=.\TestResults\SeleniumTests.trx" --collect "Code coverage" 
+
+    - name: Publish Unit Test Results
       uses: EnricoMi/publish-unit-test-result-action/composite@v2
       if: always()
       with:
-       files: |
-          Test-Results\BPCalculatorUnitTests.trx
+        files: .\TestResults\BPCalculatorUnitTests.trx
+
   publish:
     runs-on: windows-latest
+    needs: build
     steps:
     - name: Publish
       run: dotnet publish "${{ env.WORKING_DIRECTORY }}" --configuration ${{ env.CONFIGURATION }} --no-build --output "${{ env.AZURE_WEBAPP_PACKAGE_PATH }}"
+
     - name: Publish Artifacts
       uses: actions/upload-artifact@v3
       with:
         name: webapp
         path: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
+
   deploy:
     runs-on: windows-latest
-    needs: build
+    needs: publish
     steps:
     - name: Download artifact from build job
       uses: actions/download-artifact@v3
       with:
         name: webapp
         path: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
-    - name: AzureLogin
+
+    - name: Azure Login
       uses: azure/login@v1
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
+
     - name: Deploy to Azure WebApp
       uses: azure/webapps-deploy@v2
       with:

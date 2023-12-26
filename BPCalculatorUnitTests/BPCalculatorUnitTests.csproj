@@ -27,8 +27,4 @@
     <ProjectReference Include="..\BPCalculator\BPCalculator.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="TestResults\" />
-  </ItemGroup>
-
 </Project>
