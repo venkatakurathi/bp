@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
   push:
     branches:
-    - development
+    - main
 
 env:
   AZURE_WEBAPP_NAME: BPCalculator2023-VA
@@ -39,31 +39,9 @@ jobs:
     - name: Run UAT Tests
       run: dotnet test .\UATTests\UATTests.csproj --logger "trx;LogFileName=.\TestResults\UATTests.trx" --collect "Code coverage" 
 
-    - name: Run Selenium Tests
-      run: dotnet test .\SeleniumTests\SeleniumTests.csproj --logger "trx;LogFileName=.\TestResults\SeleniumTests.trx" --collect "Code coverage" 
-
-    - name: Publish Unit Test Results
-      uses: EnricoMi/publish-unit-test-result-action/composite@v2
-      if: always()
-      with:
-        files: .\TestResults\BPCalculatorUnitTests.trx
-
-  publish:
-    runs-on: windows-latest
-    needs: build
-    steps:
-    - name: Publish
-      run: dotnet publish "${{ env.WORKING_DIRECTORY }}" --configuration ${{ env.CONFIGURATION }} --no-build --output "${{ env.AZURE_WEBAPP_PACKAGE_PATH }}"
-
-    - name: Publish Artifacts
-      uses: actions/upload-artifact@v3
-      with:
-        name: webapp
-        path: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
-
   deploy:
     runs-on: windows-latest
-    needs: publish
+    needs: build
     steps:
     - name: Download artifact from build job
       uses: actions/download-artifact@v3
@@ -82,3 +60,39 @@ jobs:
         app-name: ${{ env.AZURE_WEBAPP_NAME }}
         publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
         package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
+
+    - name: Publish Artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: webapp
+        path: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
+
+  test:
+    runs-on: windows-latest
+    needs: deploy
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v4
+
+    - name: Setup .NET SDK
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: ${{ env.DOTNET_CORE_VERSION }}
+
+    - name: Restore
+      run: dotnet restore "${{ env.WORKING_DIRECTORY }}"
+
+    - name: Run Selenium Tests
+      run: dotnet test .\SeleniumTests\SeleniumTests.csproj --logger "trx;LogFileName=.\TestResults\SeleniumTests.trx" --collect "Code coverage" 
+
+    - name: Publish Unit Test Results
+      uses: EnricoMi/publish-unit-test-result-action/composite@v2
+      if: always()
+      with:
+        files: .\TestResults\BPCalculatorUnitTests.trx
+
+    - name: Publish Selenium Test Results
+      uses: EnricoMi/publish-unit-test-result-action/composite@v2
+      if: always()
+      with:
+        files: .\TestResults\SeleniumTests.trx
