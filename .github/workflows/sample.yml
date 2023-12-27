@@ -10,10 +10,9 @@ env:
 jobs:
   publish:
     runs-on: ubuntu-latest
-    
     steps:
-      - name: checkout Respo
-      - uses: actions/checkout@v3
+      - name: checkout Reso
+        uses: actions/checkout@v4
       
       - name: Setup .NET
         uses: actions/setup-dotnet@v3
