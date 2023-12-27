@@ -5,7 +5,7 @@ on:
   
 env:
   AZURE_WEBAPP_NAME: BPCalculator-VA1
-  AZURE_WEBAPP_PACKAGE_PATH: "./publish"
+  AZURE_WEBAPP_PACKAGE_PATH: .
   
 
 jobs:
@@ -32,13 +32,13 @@ jobs:
          creds: ${{ secrets.AZURE_CREDENTIALS }}
          
       - name: Publish
-        run: dotnet publish ./BPCalculator.sln --configuration Release --no-build --property PublishDir=${{ env.AZURE_WEBAPP_PACKAGE_PATH }}  #--output '${{ env.AZURE_WEBAPP_PACKAGE_PATH }}'
+        run: dotnet publish ./BPCalculator.sln --configuration Release --no-build --property PublishDir=${{ env.AZURE_WEBAPP_PACKAGE_PATH }}/BPCalculator  #--output '${{ env.AZURE_WEBAPP_PACKAGE_PATH }}'
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v2
         with:
           name: .net-app
-          path: BPCalculator/${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
+          path: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}/BPCalculator
           
   Deploy : 
     runs-on: ubuntu-latest
