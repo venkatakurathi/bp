@@ -8,7 +8,7 @@ on:
 
 env:
   AZURE_WEBAPP_NAME: BPCalculator2023-VA
-  AZURE_WEBAPP_PACKAGE_PATH: BPCalculator\published
+  AZURE_WEBAPP_PACKAGE_PATH: BPCalculator/published
   CONFIGURATION: Release
   DOTNET_CORE_VERSION: 6.0.x
   WORKING_DIRECTORY: BPCalculator
@@ -43,9 +43,14 @@ jobs:
         name : MS Tests
         path: '**.trx'    # Path to test results
         reporter: 'dotnet-trx'
+
+    - name: Publish
+      run: dotnet publish -c Release "{{ env.AZURE_WEBAPP_PACKAGE_PATH }}/BPCalculator"  
        
     - name: Run UAT Tests
       run: dotnet test .\UATTests\UATTests.csproj --logger "trx;LogFileName=.\TestResults\UATTests.trx" --collect "Code coverage" 
+
+      
 
   deploy:
     runs-on: windows-latest
