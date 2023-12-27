@@ -13,6 +13,7 @@ jobs:
     steps:
       - name: checkout Repo
         uses: actions/checkout@v4
+          'echo pwd'
       
       - name: Setup .NET
         uses: actions/setup-dotnet@v3
@@ -21,9 +22,11 @@ jobs:
           
       - name: Install Dependencies
         run: dotnet restore ./BPCalculator.sln
+          'echo pwd'
         
       - name: Build
         run: dotnet build ./BPCalculator.sln --configuration Release --no-restore
+          'echo pwd'
 
       - name: Azure Login
         uses: azure/login@v1
@@ -32,6 +35,7 @@ jobs:
          
       - name: Publish
         run: dotnet publish ./BPCalculator.sln --configuration Release --no-build --property PublishDir=${{ env.AZURE_WEBAPP_PACKAGE_PATH }}  #--output '${{ env.AZURE_WEBAPP_PACKAGE_PATH }}'
+          'echo pwd'
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v2
