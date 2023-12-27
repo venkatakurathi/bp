@@ -28,10 +28,10 @@ jobs:
         dotnet-version: ${{ env.DOTNET_CORE_VERSION }}
 
     - name: Restore
-      run: dotnet restore "${{ env.WORKING_DIRECTORY }}"
+      run: dotnet restore ${{ env.WORKING_DIRECTORY }}
 
     - name: Build
-      run: dotnet build "${{ env.WORKING_DIRECTORY }}" --configuration ${{ env.CONFIGURATION }} --no-restore
+      run: dotnet build ${{ env.WORKING_DIRECTORY }} --configuration ${{ env.CONFIGURATION }} --no-restore
       
     - name: Run Unit Tests
       run: dotnet test ./BPCalculatorUnitTests/BPCalculatorUnitTests.csproj --logger "trx;LogFileName=./TestResults/BPCalculatorUnitTests.trx" --collect "Code coverage"
@@ -45,8 +45,8 @@ jobs:
         reporter: 'dotnet-trx'
 
     - name: Publish
-      run: dotnet publish -c Release -o "{{ env.AZURE_WEBAPP_PACKAGE_PATH }}"  
-           echo "env.AZURE_WEBAPP_PACKAGE_PATH" 
+      run: dotnet publish -c Release -o ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
+           echo ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
            echo "##vso[artifact.publish containerfolder=Publish;artifactname=webapp]Publish/**"
        
     - name: Run UAT Tests
