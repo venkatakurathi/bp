@@ -34,7 +34,20 @@ jobs:
       run: dotnet build "${{ env.WORKING_DIRECTORY }}" --configuration ${{ env.CONFIGURATION }} --no-restore
       
     - name: Run Unit Tests
-      run: dotnet test .\BPCalculatorUnitTests\BPCalculatorUnitTests.csproj --logger "trx;LogFileName=.\TestResults\BPCalculatorUnitTests.trx" --collect "Code coverage" 
+      run: dotnet test .\BPCalculatorUnitTests\BPCalculatorUnitTests.csproj --logger "trx;LogFileName=.\TestResults\BPCalculatorUnitTests.trx" --collect "Code coverage"
+    
+    - name: Publish Unit Test Results
+      uses: phoenix-actions/test-reporting@v8
+      id: Unit-test-report
+      if: success() || failure()
+      with:
+        name: Unit Tests            # Name of the check run which will be created
+        path: .\TestResults\BPCalculatorUnitTests.trx    # Path to test results
+        reporter: jest-junit
+
+    - name: Read output variables
+      run: |
+        echo "url is ${{ steps.test-report.outputs.runHtmlUrl }}"
        
     - name: Run UAT Tests
       run: dotnet test .\UATTests\UATTests.csproj --logger "trx;LogFileName=.\TestResults\UATTests.trx" --collect "Code coverage" 
@@ -85,11 +98,7 @@ jobs:
     - name: Run Selenium Tests
       run: dotnet test .\SeleniumTests\SeleniumTests.csproj --logger "trx;LogFileName=.\TestResults\SeleniumTests.trx" --collect "Code coverage" 
 
-    - name: Publish Unit Test Results
-      uses: EnricoMi/publish-unit-test-result-action/composite@v2
-      if: always()
-      with:
-        files: .\TestResults\BPCalculatorUnitTests.trx
+    
 
     - name: Publish Selenium Test Results
       uses: EnricoMi/publish-unit-test-result-action/composite@v2
