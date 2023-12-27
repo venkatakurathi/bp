@@ -45,7 +45,7 @@ jobs:
         reporter: 'dotnet-trx'
 
     - name: Publish
-      run: dotnet publish -c Release "{{ env.AZURE_WEBAPP_PACKAGE_PATH }}/BPCalculator"  
+      run: dotnet publish -c Release "{{ env.AZURE_WEBAPP_PACKAGE_PATH }}"  
        
     - name: Run UAT Tests
       run: dotnet test .\UATTests\UATTests.csproj --logger "trx;LogFileName=.\TestResults\UATTests.trx" --collect "Code coverage" 
