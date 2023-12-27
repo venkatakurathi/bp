@@ -34,7 +34,7 @@ jobs:
       run: dotnet build "${{ env.WORKING_DIRECTORY }}" --configuration ${{ env.CONFIGURATION }} --no-restore
       
     - name: Run Unit Tests
-      run: dotnet test .\BPCalculatorUnitTests\BPCalculatorUnitTests.csproj --logger "trx;LogFileName=.\TestResults\BPCalculatorUnitTests.trx" --collect "Code coverage"
+      run: dotnet test ./BPCalculatorUnitTests/BPCalculatorUnitTests.csproj --logger "trx;LogFileName=./TestResults/BPCalculatorUnitTests.trx" --collect "Code coverage"
     
     - name: Publish Unit Test Results
       uses: dorny/test-reporter@v1
@@ -50,7 +50,7 @@ jobs:
            echo "##vso[artifact.publish containerfolder=Publish;artifactname=webapp]Publish/**"
        
     - name: Run UAT Tests
-      run: dotnet test .\UATTests\UATTests.csproj --logger "trx;LogFileName=.\TestResults\UATTests.trx" --collect "Code coverage" 
+      run: dotnet test ./UATTests/UATTests.csproj --logger "trx;LogFileName=./TestResults/UATTests.trx" --collect "Code coverage" 
 
       
 
