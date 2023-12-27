@@ -5,7 +5,7 @@ on:
   
 env:
   AZURE_WEBAPP_NAME: BPCalculator-VA1
-  AZURE_WEBAPP_PACKAGE_PATH: "${{ GITHUB_WORKSPACE }}/publish"
+  AZURE_WEBAPP_PACKAGE_PATH: "${{ env.GITHUB_WORKSPACE }}/publish"
   
 
 jobs:
@@ -15,7 +15,7 @@ jobs:
       - name: checkout Repo
         uses: actions/checkout@v4
       - run: |
-          echo ${{ GITHUB_WORKSPACE }}
+          echo ${{ env.GITHUB_WORKSPACE }}
       
       - name: Setup .NET
         uses: actions/setup-dotnet@v3
