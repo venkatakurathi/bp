@@ -24,7 +24,12 @@ jobs:
         
       - name: Build
         run: dotnet build ./BPCalculator.sln --configuration Release --no-restore
-        
+
+      - name: Azure Login
+        uses: azure/login@v1
+        with:
+         creds: ${{ secrets.AZURE_CREDENTIALS }}
+         
       - name: Publish
         run: dotnet publish ./BPCalculator.sln --configuration Release --no-build --output '${{ env.AZURE_WEBAPP_PACKAGE_PATH }}'
         
