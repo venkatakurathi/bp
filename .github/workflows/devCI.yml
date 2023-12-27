@@ -15,7 +15,7 @@ env:
 
 jobs:
   build:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     steps:
     - name: Checkout Repository
       uses: actions/checkout@v4
@@ -46,6 +46,8 @@ jobs:
 
     - name: Publish
       run: dotnet publish -c Release -o "{{ env.AZURE_WEBAPP_PACKAGE_PATH }}"  
+           echo "env.AZURE_WEBAPP_PACKAGE_PATH" 
+           echo "##vso[artifact.publish containerfolder=Publish;artifactname=webapp]Publish/**"
        
     - name: Run UAT Tests
       run: dotnet test .\UATTests\UATTests.csproj --logger "trx;LogFileName=.\TestResults\UATTests.trx" --collect "Code coverage" 
