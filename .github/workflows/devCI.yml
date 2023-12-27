@@ -37,17 +37,12 @@ jobs:
       run: dotnet test .\BPCalculatorUnitTests\BPCalculatorUnitTests.csproj --logger "trx;LogFileName=.\TestResults\BPCalculatorUnitTests.trx" --collect "Code coverage"
     
     - name: Publish Unit Test Results
-      uses: phoenix-actions/test-reporting@v8
-      id: Unit-test-report
-      if: success() || failure()
+      uses: dorny/test-reporter@v1
       with:
-        name: Unit Tests            # Name of the check run which will be created
-        path: .\TestResults\BPCalculatorUnitTests.trx    # Path to test results
-        reporter: jest-junit
-
-    - name: Read output variables
-      run: |
-        echo "url is ${{ steps.test-report.outputs.runHtmlUrl }}"
+        artifact : ''            # Name of the check run which will be created
+        name : MS Tests
+        path: '**.trx'    # Path to test results
+        reporter: 'dotnet-trx'
        
     - name: Run UAT Tests
       run: dotnet test .\UATTests\UATTests.csproj --logger "trx;LogFileName=.\TestResults\UATTests.trx" --collect "Code coverage" 
