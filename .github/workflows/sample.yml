@@ -38,7 +38,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: .net-app
-          path: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
+          path: BPCalculator/${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
           
   Deploy : 
     runs-on: ubuntu-latest
