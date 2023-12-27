@@ -14,8 +14,8 @@ jobs:
         with:
           projectBaseDir: .
           args: >
-            -Dsonar.organization=gclynch
-            -Dsonar.projectKey=gclynch_bmi2021multijob
+            -Dsonar.organization=venkatakurathi
+            -Dsonar.projectKey=venkatakurathi_bp
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
