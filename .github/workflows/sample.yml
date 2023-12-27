@@ -4,14 +4,14 @@ on:
   workflow_dispatch:
   
 env:
-  AZURE_WEBAPP_NAME: BPCalculator-VA
+  AZURE_WEBAPP_NAME: BPCalculator-VA1
   AZURE_WEBAPP_PACKAGE_PATH: "./publish"
 
 jobs:
   publish:
     runs-on: ubuntu-latest
     steps:
-      - name: checkout Reso
+      - name: checkout Repo
         uses: actions/checkout@v4
       
       - name: Setup .NET
@@ -37,5 +37,5 @@ jobs:
         uses: azure/webapps-deploy@v2
         with:
           app-name: ${{ env.AZURE_WEBAPP_NAME }}
-          publish-profile: ${{ secrets.AZURE_PUBLISH_PROFILE }}
+          publish-profile: ${{ secrets.AZURE_PUBLISH_PROFILE1 }}
           package: "${{ env.AZURE_WEBAPP_PACKAGE_PATH }}"
