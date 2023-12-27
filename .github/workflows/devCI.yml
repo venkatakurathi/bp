@@ -1,10 +1,10 @@
-name: Build and deploy .NET Core application to Web App BPCalculator20231220025453
+name: Build and deploy #.NET Core application to Web App BPCalculator20231220025453
 
 on:
   workflow_dispatch:
-  push:
-    branches:
-    - main
+  #push:
+    #branches:
+    #- main
 
 env:
   AZURE_WEBAPP_NAME: BPCalculator2023-VA
