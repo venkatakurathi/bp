@@ -9,7 +9,7 @@ env:
 
 defaults:
   run:
-    working-directory: BPCaclculator
+    working-directory: BPCalculator
   
 jobs:
   build:
