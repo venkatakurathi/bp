@@ -43,37 +43,29 @@ jobs:
          creds: ${{ secrets.AZURE_CREDENTIALS }}
          
       - name: Publish
-        run: dotnet publish ./BPCalculator.sln --configuration Release --no-build --property PublishDir=${{ env.AZURE_WEBAPP_PACKAGE_PATH }}  #--output '${{ env.AZURE_WEBAPP_PACKAGE_PATH }}'
-      
-      - name: Debug Workspace Contents
         run: |
-          echo "Contents of the workspace:"
-          ls -R
           pwd
+          echo "Contents of the workspace:"
+          ls -l
+          dotnet publish ./BPCalculator.sln --configuration Release --no-build --property PublishDir=${{ env.AZURE_WEBAPP_PACKAGE_PATH }}  #--output '${{ env.AZURE_WEBAPP_PACKAGE_PATH }}'
       
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
         with: 
           name: BPcalculator
           path: '**/publish/'
-
+          
       - name: Debug Workspace Contents
         run: |
-          echo "Contents of the workspace:"
-          ls -R
           pwd
+          echo "Contents of the workspace:"
+          ls -l
 
       - name: Download artifact from build job
         uses: actions/download-artifact@v3
         with:
           name: BPcalculator
           path: BPCalculator
-
-      - name: Debug Workspace Contents
-        run: |
-          echo "Contents of the workspace:"
-          ls -R
-          pwd
           
       - name: Azure Login
         uses: azure/login@v1
