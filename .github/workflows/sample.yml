@@ -37,8 +37,8 @@ jobs:
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
         with:
-          name: .net-app
-          path: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
+          name: BPCalculator
+          path: BPcalculator/publish
           
   Deploy : 
     runs-on: ubuntu-latest
@@ -51,7 +51,7 @@ jobs:
       - name: Download artifact from build job
         uses: actions/download-artifact@v4
         with:
-          name: .net-app
+          name: BPCalculator
           
       - name: Deploy to Azure Web App
         id: deploy-to-webapp    
