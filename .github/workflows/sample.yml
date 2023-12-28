@@ -62,7 +62,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with: 
           name: BPcalculator
-          path: ./BPcalculator/publish
+          path: ./BPcalculator
           if-no-files-found: error
           
   deploy : 
