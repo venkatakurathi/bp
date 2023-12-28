@@ -36,8 +36,9 @@ jobs:
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
-        with:
-          path: /home/runner/work/bp/bp/BPCalculator/publish/
+        with: 
+          name: BPcalculator
+          path: '**/publish/'
           
   Deploy : 
     runs-on: ubuntu-latest
