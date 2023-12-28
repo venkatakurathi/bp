@@ -9,7 +9,7 @@ env:
 
 permissions:
   id-token: write
-  contents: write-all
+  contents: write
 
 defaults:
   run:
