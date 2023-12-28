@@ -7,6 +7,10 @@ env:
   AZURE_WEBAPP_NAME: BPCalculator-VA1
   AZURE_WEBAPP_PACKAGE_PATH: ./publish
 
+permissions:
+  id-token: write
+  contents: read
+
 defaults:
   run:
     working-directory: BPCalculator
@@ -54,7 +58,7 @@ jobs:
          creds: ${{ secrets.AZURE_CREDENTIALS }}
          
       - name: Publish
-        run: dotnet publish -c Release --no-build --property PublishDir='${{ env.working-directory }}\publish'  #--output '${{ env.AZURE_WEBAPP_PACKAGE_PATH }}'
+        run: dotnet publish -c Release --no-build --property PublishDir='BPCalculator\publish'  #--output '${{ env.AZURE_WEBAPP_PACKAGE_PATH }}'
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
@@ -74,7 +78,7 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: BPcalculator
-          path: '${{ env.working-directory }}\publish'
+          path: 'BPCalculator\publish'
           
       - name: Azure Login
         uses: azure/login@v1
