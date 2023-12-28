@@ -6,41 +6,28 @@ on:
 env:
   AZURE_WEBAPP_NAME: BPCalculator-VA1
   AZURE_WEBAPP_PACKAGE_PATH: ./publish
-
-permissions: write-all
-
-defaults:
-  run:
-    working-directory: ./BPCalculator
   
+
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - name: checkout Repo
-        uses: actions/checkout@v4.1.1
-        
+        uses: actions/checkout@v4
+      
       - name: Setup .NET
-        uses: actions/setup-dotnet@v1
+        uses: actions/setup-dotnet@v3
         with:
           dotnet-version: '6.0.x'
           
-      - name: Set up dependency caching for faster builds
-        uses: actions/cache@v3
-        with:
-          path: ~/.nuget/packages
-          key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-nuget-
-          
       - name: Install Dependencies
-        run: dotnet restore 
+        run: dotnet restore ./BPCalculator.sln
         
       - name: Build
-        run: dotnet build --configuration Release --no-restore
+        run: dotnet build ./BPCalculator.sln --configuration Release --no-restore
 
       - name: Run Unit Tests
-        run: dotnet test ../BPCalculatorUnitTests --logger "trx;LogFileName=./TestResults/BPCalculatorUnitTests.trx" --collect "Code coverage"
+        run: dotnet test ./BPCalculatorUnitTests/BPCalculatorUnitTests.csproj --logger "trx;LogFileName=./TestResults/BPCalculatorUnitTests.trx" --collect "Code coverage"
     
       - name: Publish Unit Test Results
         uses: dorny/test-reporter@v1
@@ -56,14 +43,13 @@ jobs:
          creds: ${{ secrets.AZURE_CREDENTIALS }}
          
       - name: Publish
-        run: dotnet publish -c Release -o ./publish # --property PublishDir=./publish  --output '${{ env.AZURE_WEBAPP_PACKAGE_PATH }}'
+        run: dotnet publish ./BPCalculator.sln --configuration Release --no-build --property PublishDir=${{ env.AZURE_WEBAPP_PACKAGE_PATH }}  #--output '${{ env.AZURE_WEBAPP_PACKAGE_PATH }}'
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
         with: 
           name: BPcalculator
-          path: ./BPcalculator/publish
-          if-no-files-found: error
+          path: '**/publish/'
           
   deploy : 
     runs-on: ubuntu-latest
@@ -77,7 +63,7 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: BPcalculator
-          path: ./BPCalculator
+          path: BPCalculator/publish/
           
       - name: Azure Login
         uses: azure/login@v1
