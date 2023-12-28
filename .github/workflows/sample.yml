@@ -38,7 +38,7 @@ jobs:
         run: dotnet build --configuration Release --no-restore
 
       - name: Run Unit Tests
-        run: dotnet test BPCalculatorUnitTests/BPCalculatorUnitTests.csproj --no-build --logger "trx;LogFileName=./TestResults/BPCalculatorUnitTests.trx" --collect "Code coverage"
+        run: dotnet test ../BPCalculatorUnitTests --no-build --logger "trx;LogFileName=./TestResults/BPCalculatorUnitTests.trx" --collect "Code coverage"
     
       - name: Publish Unit Test Results
         uses: dorny/test-reporter@v1
@@ -54,13 +54,13 @@ jobs:
          creds: ${{ secrets.AZURE_CREDENTIALS }}
          
       - name: Publish
-        run: dotnet publish BPCalculator -c Release --no-build --property PublishDir=${{ env.AZURE_WEBAPP_PACKAGE_PATH }}  #--output '${{ env.AZURE_WEBAPP_PACKAGE_PATH }}'
+        run: dotnet publish -c Release --no-build --property PublishDir=${{ env.AZURE_WEBAPP_PACKAGE_PATH }}  #--output '${{ env.AZURE_WEBAPP_PACKAGE_PATH }}'
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
         with: 
           name: BPcalculator
-          path: './BPCalculator/publish/'
+          path: './publish/'
           
   deploy : 
     runs-on: ubuntu-latest
@@ -74,7 +74,7 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: BPcalculator
-          path: ./BPCalculator/publish
+          path: publish
           
       - name: Azure Login
         uses: azure/login@v1
