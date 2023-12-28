@@ -7,9 +7,7 @@ env:
   AZURE_WEBAPP_NAME: BPCalculator-VA1
   AZURE_WEBAPP_PACKAGE_PATH: ./publish
 
-permissions:
-  id-token: write
-  contents: write
+permissions: write-all
 
 defaults:
   run:
