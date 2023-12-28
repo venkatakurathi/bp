@@ -50,6 +50,26 @@ jobs:
         with: 
           name: BPcalculator
           path: '**/publish/'
+
+      - name: Download artifact from build job
+        uses: actions/download-artifact@v3
+        with:
+          name: BPcalculator
+          path: BPCalculator
+          
+      - name: Azure Login
+        uses: azure/login@v1
+        with:
+           creds: ${{ secrets.AZURE_CREDENTIALS }}
+         
+      - name: Deploy to Azure Web App
+        id: deploy-to-webapp    
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: ${{ env.AZURE_WEBAPP_NAME }}
+          slot-name: 'production'
+          publish-profile: ${{ secrets.AZURE_PUBLISH_PROFILE1 }}
+          package: "${{ env.AZURE_WEBAPP_PACKAGE_PATH }}"
           
   deploy : 
     runs-on: ubuntu-latest
