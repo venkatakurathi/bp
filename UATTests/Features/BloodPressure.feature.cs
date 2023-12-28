@@ -48,8 +48,8 @@ namespace UATTests.Features
         public static void FeatureSetup(Microsoft.VisualStudio.TestTools.UnitTesting.TestContext testContext)
         {
             testRunner = TechTalk.SpecFlow.TestRunnerManager.GetTestRunner();
-            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Features", "Blood Pressure Calculation", "    In order to determine the category of blood pressure\r\n    As a user\r\n    I wa" +
-                    "nt to input systolic and diastolic values and get the corresponding category", ProgrammingLanguage.CSharp, ((string[])(null)));
+            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Features", "Blood Pressure Calculation", "    In order to determine the category of blood pressure\n    As a user\n    I want" +
+                    " to input systolic and diastolic values and get the corresponding category", ProgrammingLanguage.CSharp, ((string[])(null)));
             testRunner.OnFeatureStart(featureInfo);
         }
         
