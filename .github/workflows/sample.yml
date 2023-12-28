@@ -38,7 +38,7 @@ jobs:
         run: dotnet build --configuration Release --no-restore
 
       - name: Run Unit Tests
-        run: dotnet test ../BPCalculatorUnitTests --no-build --logger "trx;LogFileName=./TestResults/BPCalculatorUnitTests.trx" --collect "Code coverage"
+        run: dotnet test ../BPCalculatorUnitTests --logger "trx;LogFileName=./TestResults/BPCalculatorUnitTests.trx" --collect "Code coverage"
     
       - name: Publish Unit Test Results
         uses: dorny/test-reporter@v1
