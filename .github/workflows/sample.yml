@@ -65,7 +65,7 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: BPcalculator
-          path: BPCalculator
+          path: /home/runner/work/bp/bp/BPCalculator/
           
       - name: Azure Login
         uses: azure/login@v1
