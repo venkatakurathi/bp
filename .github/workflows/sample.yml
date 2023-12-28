@@ -62,7 +62,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with: 
           name: BPcalculator
-          path: publish
+          path: 'BPcalculator\publish'
           
   deploy : 
     runs-on: ubuntu-latest
