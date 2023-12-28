@@ -32,10 +32,10 @@ jobs:
             ${{ runner.os }}-nuget-
           
       - name: Install Dependencies
-        run: dotnet restore BPCalculator/BPCalculator.csproj
+        run: dotnet restore 
         
       - name: Build
-        run: dotnet build BPCalculator/BPCalculator.csproj --configuration Release --no-restore
+        run: dotnet build --configuration Release --no-restore
 
       - name: Run Unit Tests
         run: dotnet test BPCalculatorUnitTests/BPCalculatorUnitTests.csproj --no-build --logger "trx;LogFileName=./TestResults/BPCalculatorUnitTests.trx" --collect "Code coverage"
