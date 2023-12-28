@@ -63,7 +63,7 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: BPcalculator
-          path: BPCalculator/publish/
+          path: BPCalculator/publish
           
       - name: Azure Login
         uses: azure/login@v1
