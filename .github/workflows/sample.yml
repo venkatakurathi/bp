@@ -32,13 +32,13 @@ jobs:
             ${{ runner.os }}-nuget-
           
       - name: Install Dependencies
-        run: dotnet restore ./BPCalculator/BPCalculator.csproj
+        run: dotnet restore BPCalculator/BPCalculator.csproj
         
       - name: Build
-        run: dotnet build ./BPCalculator/BPCalculator.csproj --configuration Release --no-restore
+        run: dotnet build BPCalculator/BPCalculator.csproj --configuration Release --no-restore
 
       - name: Run Unit Tests
-        run: dotnet test ./BPCalculatorUnitTests/BPCalculatorUnitTests.csproj --no-build --logger "trx;LogFileName=./TestResults/BPCalculatorUnitTests.trx" --collect "Code coverage"
+        run: dotnet test BPCalculatorUnitTests/BPCalculatorUnitTests.csproj --no-build --logger "trx;LogFileName=./TestResults/BPCalculatorUnitTests.trx" --collect "Code coverage"
     
       - name: Publish Unit Test Results
         uses: dorny/test-reporter@v1
@@ -54,7 +54,7 @@ jobs:
          creds: ${{ secrets.AZURE_CREDENTIALS }}
          
       - name: Publish
-        run: dotnet publish ./BPCalculator -c Release --no-build --property PublishDir=${{ env.AZURE_WEBAPP_PACKAGE_PATH }}  #--output '${{ env.AZURE_WEBAPP_PACKAGE_PATH }}'
+        run: dotnet publish BPCalculator -c Release --no-build --property PublishDir=${{ env.AZURE_WEBAPP_PACKAGE_PATH }}  #--output '${{ env.AZURE_WEBAPP_PACKAGE_PATH }}'
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
