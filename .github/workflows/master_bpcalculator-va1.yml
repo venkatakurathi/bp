@@ -5,8 +5,8 @@ name: Build and deploy ASP.Net Core app to Azure Web App - BPCalculator-VA1
 
 on:
   push:
-    branches:
-      - main
+    #branches:
+     # - main
   workflow_dispatch:
 
 jobs:
@@ -81,11 +81,11 @@ jobs:
       - name: Run acceptance tests
         run: dotnet test UATTests\UATTests.csproj --collect "Code Coverage" -l:trx
 
-      - name: Publish BDD test results
+      - name: Publish UAT test results
         uses: dorny/test-reporter@v1
         with:
          artifact: ''                                       # artifact name
-         name: BDD / Acceptance Tests Report                # Name of the check run which will be created
+         name: UAT Report                # Name of the check run which will be created
          path: '**.trx'                                     # Path to test results (inside artifact .zip)
          reporter: 'dotnet-trx'                             # Format of test results
 
