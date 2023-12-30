@@ -24,9 +24,9 @@ namespace SeleniumTest
         public void Setup()
         {
             // Read URL from SeleniumTest.runsettings (configure run settings)
-            // this.webAppUri = testContextInstance.Properties["webAppUri"].ToString();
+             this.webAppUri = testContextInstance.Properties["webAppUri"].ToString();
 
-            this.webAppUri = "http://localhost:53135/";
+            //this.webAppUri = "http://localhost:53135/";
         }
 
         [TestMethod]
