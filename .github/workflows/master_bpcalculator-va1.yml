@@ -14,16 +14,16 @@ jobs:
     runs-on: windows-latest
 
     steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
       - name: Set up JDK 17
         uses: actions/setup-java@v3
         with:
           java-version: 17
           distribution: 'zulu'
-      
+
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
       - name: Set up Node.js
         uses: actions/setup-node@v2
         with:
@@ -35,22 +35,22 @@ jobs:
           dotnet-version: '6.0.x'
           include-prerelease: true
           
-      - name: Cache SonarQube packages
-        uses: actions/cache@v1
+      - name: Cache SonarCloud packages
+        uses: actions/cache@v3
         with:
           path: ~\sonar\cache
           key: ${{ runner.os }}-sonar
           restore-keys: ${{ runner.os }}-sonar
 
-      - name: Cache SonarQube scanner
+      - name: Cache SonarCloud scanner
         id: cache-sonar-scanner
-        uses: actions/cache@v1
+        uses: actions/cache@v3
         with:
           path: .\.sonar\scanner
           key: ${{ runner.os }}-sonar-scanner
           restore-keys: ${{ runner.os }}-sonar-scanner
       
-      - name: Install SonarQube scanner
+      - name: Install SonarCloud scanner
         if: steps.cache-sonar-scanner.outputs.cache-hit != 'true'
         shell: powershell
         run: |
@@ -60,14 +60,34 @@ jobs:
       - name: Build and analyze
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         shell: powershell
         run: |
-          .\.sonar\scanner\dotnet-sonarscanner begin /k:"venkatakurathi_bp" /o:"venkatakurathi" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" 
-          dotnet build --configuration Release
-          .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
+         .\.sonar\scanner\dotnet-sonarscanner begin /k:"venkatakurathi_bp" /o:"venkatakurathi" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io"
+         dotnet build --configuration Release
+         .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
 
-     # - name: Build with dotnet
-      #  run: dotnet build --configuration Release
+      - name: Run unit tests
+        run: dotnet test BPCalculatorUnitTests\BPCalculatorUnitTests.csproj --collect "Code Coverage" -l:trx
+
+      - name: Publish Unit Test Results
+        uses: dorny/test-reporter@v1
+        with:
+          artifact : ''            # Name of the check run which will be created
+          name : MS Tests
+          path: '**.trx'    # Path to test results
+          reporter: 'dotnet-trx'
+
+      - name: Run acceptance tests
+        run: dotnet test UATTests\UATTests.csproj --collect "Code Coverage" -l:trx
+
+      - name: Publish BDD test results
+        uses: dorny/test-reporter@v1
+        with:
+         artifact: ''                                       # artifact name
+         name: BDD / Acceptance Tests Report                # Name of the check run which will be created
+         path: '**.trx'                                     # Path to test results (inside artifact .zip)
+         reporter: 'dotnet-trx'                             # Format of test results
 
       - name: dotnet publish
         run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
@@ -99,3 +119,23 @@ jobs:
           slot-name: 'Production'
           package: .
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_5168CB129E6D4FF88724FFF83C3A3FF4 }}
+
+      - name: Run Selenium tests        
+        run: dotnet test ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}SeleniumTests.dll --logger:"trx;LogFileName=selenium.trx"
+  
+      # Upload results of selenium tests as an artefact
+      - uses: actions/upload-artifact@v3
+        with:
+         name: Selenium Tests Results
+         path: TestResults/selenium.trx
+
+         # SWAP SLOTS
+    # login to Azure account
+      - uses: azure/login@v1
+        with:
+         creds: ${{ secrets.AZURE_CREDENTIALS }}                         # JSON objects which represents service principal
+
+    # blue/green
+      - name: swap staging and production slots
+        run: |
+         az webapp deployment slot swap -n ${{ env.app-name }} -g ${{ env.rg-name }} --slot staging --target-slot production
