@@ -136,6 +136,6 @@ jobs:
          creds: ${{ secrets.AZURE_CREDENTIALS }}                         # JSON objects which represents service principal
 
     # blue/green
-      - name: swap staging and production slots
-        run: |
-         az webapp deployment slot swap -n BPCalculator-VA1 -g BPCalculator2023 --slot staging --target-slot production
+      # - name: swap staging and production slots
+        # run: |
+         # az webapp deployment slot swap -n BPCalculator-VA1 -g BPCalculator2023 --slot staging --target-slot production
