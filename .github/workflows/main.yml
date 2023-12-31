@@ -5,8 +5,8 @@ name: Build and deploy ASP.Net Core app to Azure Web App - BPCalculator-VA1
 
 on:
   push:
-    #branches:
-     # - main
+    branches:
+     - main
   workflow_dispatch:
 
 jobs:
@@ -74,7 +74,7 @@ jobs:
         uses: dorny/test-reporter@v1
         with:
           artifact : ''            # Name of the check run which will be created
-          name : MS Tests
+          name : Unit Tests Report
           path: '**.trx'    # Path to test results
           reporter: 'dotnet-trx'
 
@@ -122,6 +122,15 @@ jobs:
 
       - name: Run Selenium tests        
         run: dotnet test ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}SeleniumTests.dll --logger:"trx;LogFileName=selenium.trx"
+
+
+      - name: Publish Selenium test results
+        uses: dorny/test-reporter@v1
+        with:
+         artifact: ''                                       # artifact name
+         name: Slenium Test Report                          # Name of the check run which will be created
+         path: '**.trx'                                     # Path to test results (inside artifact .zip)
+         reporter: 'dotnet-trx'
   
       # Upload results of selenium tests as an artefact
       - uses: actions/upload-artifact@v3
