@@ -138,4 +138,4 @@ jobs:
     # blue/green
       - name: swap staging and production slots
         run: |
-         az webapp deployment slot swap -n ${{ env.app-name }} -g ${{ env.rg-name }} --slot staging --target-slot production
+         az webapp deployment slot swap -n BPCalculator-VA1 -g BPCalculator2023 --slot staging --target-slot production
