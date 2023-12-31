@@ -67,6 +67,23 @@ jobs:
          dotnet build --configuration Release
          .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
 
+      - name: Depcheck
+        uses: dependency-check/Dependency-Check_Action@main
+        id: Depcheck
+        with:
+          project: 'BP'
+          path: '.'
+          format: 'HTML'    
+          args: >
+            --failOnCVSS 8            
+          # fail if CVSS score (CVE scoring system) is High >=8
+          
+      - name: Upload Test results
+        uses: actions/upload-artifact@v3
+        with:
+           name: Depcheck report
+           path: ${{github.workspace}}/reports
+
       - name: Run unit tests
         run: dotnet test BPCalculatorUnitTests\BPCalculatorUnitTests.csproj --collect "Code Coverage" -l:trx
 
@@ -124,15 +141,6 @@ jobs:
         run: dotnet test ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}SeleniumTests.dll --logger:"trx;LogFileName=selenium.trx"
         # run: dotnet test SeleniumTests\SeleniumTests.csproj --collect "Code Coverage" -l:trx
 
-
-
-      - name: Publish Selenium test results
-        uses: dorny/test-reporter@v1
-        with:
-         artifact: ''                                       # artifact name
-         name: Selenium Test Report                          # Name of the check run which will be created
-         path: 'D:\a\bp\bp\TestResults\selenium.trx'                                     # Path to test results (inside artifact .zip)
-         reporter: 'dotnet-trx'
   
       # Upload results of selenium tests as an artefact
       - uses: actions/upload-artifact@v3
