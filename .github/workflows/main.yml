@@ -121,8 +121,8 @@ jobs:
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_5168CB129E6D4FF88724FFF83C3A3FF4 }}
 
       - name: Run Selenium tests        
-       # run: dotnet test ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}SeleniumTests.dll --logger:"trx;LogFileName=selenium.trx"
-        run: dotnet test SeleniumTests\SeleniumTests.csproj --collect "Code Coverage" -l:trx
+        run: dotnet test ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}SeleniumTests.dll --logger:"trx;LogFileName=selenium.trx"
+        # run: dotnet test SeleniumTests\SeleniumTests.csproj --collect "Code Coverage" -l:trx
 
 
 
@@ -131,7 +131,7 @@ jobs:
         with:
          artifact: ''                                       # artifact name
          name: Selenium Test Report                          # Name of the check run which will be created
-         path: '**.trx'                                     # Path to test results (inside artifact .zip)
+         path: '**\TestResults\selenium.trx'                                     # Path to test results (inside artifact .zip)
          reporter: 'dotnet-trx'
   
       # Upload results of selenium tests as an artefact
