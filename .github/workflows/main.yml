@@ -85,7 +85,7 @@ jobs:
         uses: dorny/test-reporter@v1
         with:
          artifact: ''                                       # artifact name
-         name: UAT Report                # Name of the check run which will be created
+         name: UAT Report                                   # Name of the check run which will be created
          path: '**.trx'                                     # Path to test results (inside artifact .zip)
          reporter: 'dotnet-trx'                             # Format of test results
 
@@ -121,14 +121,16 @@ jobs:
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_5168CB129E6D4FF88724FFF83C3A3FF4 }}
 
       - name: Run Selenium tests        
-        run: dotnet test ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}SeleniumTests.dll --logger:"trx;LogFileName=selenium.trx"
+       # run: dotnet test ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}SeleniumTests.dll --logger:"trx;LogFileName=selenium.trx"
+        run: dotnet test SeleniumTests\SeleniumTests.csproj --collect "Code Coverage" -l:trx
+
 
 
       - name: Publish Selenium test results
         uses: dorny/test-reporter@v1
         with:
          artifact: ''                                       # artifact name
-         name: Slenium Test Report                          # Name of the check run which will be created
+         name: Selenium Test Report                          # Name of the check run which will be created
          path: '**.trx'                                     # Path to test results (inside artifact .zip)
          reporter: 'dotnet-trx'
   
