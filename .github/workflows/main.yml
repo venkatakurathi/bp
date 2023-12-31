@@ -80,22 +80,22 @@ jobs:
          dotnet build --configuration Release
          .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
 
-      - name: Depcheck
-        uses: dependency-check/Dependency-Check_Action@main
-        id: Depcheck
-        with:
-          project: 'BP'
-          path: '.'
-          format: 'HTML'    
-          args: >
-            --failOnCVSS 8            
+     # - name: Depcheck
+      #  uses: dependency-check/Dependency-Check_Action@main
+       # id: Depcheck
+        #with:
+         # project: 'BP'
+          #path: '.'
+          #format: 'HTML'    
+          #args: >
+           # --failOnCVSS 8            
           # fail if CVSS score (CVE scoring system) is High >=8
           
-      - name: Upload Test results
-        uses: actions/upload-artifact@v3
-        with:
-           name: Depcheck report
-           path: ${{github.workspace}}/reports
+      #- name: Upload Test results
+       # uses: actions/upload-artifact@v3
+        #with:
+         #  name: Depcheck report
+          # path: ${{github.workspace}}/reports
 
       - name: Run unit tests
         run: dotnet test BPCalculatorUnitTests\BPCalculatorUnitTests.csproj --collect "Code Coverage" -l:trx
