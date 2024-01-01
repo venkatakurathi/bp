@@ -7,6 +7,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="selenium-manager\**" />
+    <EmbeddedResource Remove="selenium-manager\**" />
+    <None Remove="selenium-manager\**" />
+    <SpecFlowFeatureFiles Remove="selenium-manager\**" />
+    <SpecFlowObsoleteCodeBehindFiles Remove="selenium-manager\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="coverlet.collector" Version="6.0.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -22,13 +30,42 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Drivers\" />
     <Folder Include="StepDefinitions\" />
-    <Folder Include="Support\" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\BPCalculator\BPCalculator.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Remove="C:\Users\venka\.nuget\packages\microsoft.testplatform.testhost\17.8.0\build\netcoreapp3.1\x64\testhost.dll" />
+    <Content Remove="C:\Users\venka\.nuget\packages\microsoft.testplatform.testhost\17.8.0\build\netcoreapp3.1\x64\testhost.exe" />
+    <Content Remove="C:\Users\venka\.nuget\packages\selenium.webdriver\4.16.2\buildTransitive\..\manager\linux\selenium-manager" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Remove="C:\Users\venka\.nuget\packages\selenium.webdriver\4.16.2\buildTransitive\..\manager\macos\selenium-manager" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Remove="C:\Users\venka\.nuget\packages\selenium.webdriver\4.16.2\buildTransitive\..\manager\windows\selenium-manager.exe" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="C:\Users\venka\.nuget\packages\mstest.testadapter\2.2.10\build\net5.0\\Microsoft.TestPlatform.AdapterUtilities.dll" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="C:\Users\venka\.nuget\packages\mstest.testadapter\2.2.10\build\net5.0\..\_common\Microsoft.VisualStudio.TestPlatform.MSTest.TestAdapter.dll" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="C:\Users\venka\.nuget\packages\mstest.testadapter\2.2.10\build\net5.0\Microsoft.VisualStudio.TestPlatform.MSTestAdapter.PlatformServices.dll" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="C:\Users\venka\.nuget\packages\mstest.testadapter\2.2.10\build\net5.0\..\_common\Microsoft.VisualStudio.TestPlatform.MSTestAdapter.PlatformServices.Interface.dll" />
+    <None Remove="C:\Users\venka\.nuget\packages\specflow.mstest\3.9.40\build\\..\lib\netstandard2.0\TechTalk.SpecFlow.MSTest.SpecFlowPlugin.dll" />
   </ItemGroup>
 
 </Project>

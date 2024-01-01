@@ -4,6 +4,11 @@
     <TargetFramework>net6.0</TargetFramework>
     <StartupObject>BPCalculator.Program</StartupObject>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Content Remove="C:\Users\venka\.nuget\packages\microsoft.testplatform.testhost\17.8.0\build\netcoreapp3.1\x64\testhost.dll" />
+    <Content Remove="C:\Users\venka\.nuget\packages\microsoft.testplatform.testhost\17.8.0\build\netcoreapp3.1\x64\testhost.exe" />
+  </ItemGroup>
   <ItemGroup>
     <PackageReference Include="dotnet-framework-sonarscanner" Version="5.14.0" />
     <PackageReference Include="DotNetSeleniumExtras.WaitHelpers" Version="3.11.0" />
@@ -20,6 +25,15 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Data\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Remove="C:\Users\venka\.nuget\packages\selenium.webdriver\4.16.2\buildTransitive\..\manager\linux\selenium-manager" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Remove="C:\Users\venka\.nuget\packages\selenium.webdriver\4.16.2\buildTransitive\..\manager\macos\selenium-manager" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Remove="C:\Users\venka\.nuget\packages\selenium.webdriver\4.16.2\buildTransitive\..\manager\windows\selenium-manager.exe" />
   </ItemGroup>
 
 </Project>

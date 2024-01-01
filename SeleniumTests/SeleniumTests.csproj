@@ -9,6 +9,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="C:\Users\venka\.nuget\packages\microsoft.testplatform.testhost\17.8.0\build\netcoreapp3.1\x64\testhost.dll" />
+    <Content Remove="C:\Users\venka\.nuget\packages\microsoft.testplatform.testhost\17.8.0\build\netcoreapp3.1\x64\testhost.exe" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="DotNetSeleniumExtras.WaitHelpers" Version="3.11.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.8.0" />
     <PackageReference Include="MSTest.TestAdapter" Version="3.1.1" />
@@ -23,8 +28,31 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="drivers\" />
     <Folder Include="TestResults\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="C:\Users\venka\.nuget\packages\mstest.testadapter\3.1.1\build\net6.0\\Microsoft.TestPlatform.AdapterUtilities.dll" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="C:\Users\venka\.nuget\packages\mstest.testadapter\3.1.1\build\net6.0\Microsoft.VisualStudio.TestPlatform.MSTest.TestAdapter.dll" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="C:\Users\venka\.nuget\packages\mstest.testadapter\3.1.1\build\net6.0\Microsoft.VisualStudio.TestPlatform.MSTestAdapter.PlatformServices.dll" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Remove="C:\Users\venka\.nuget\packages\selenium.webdriver\4.16.2\buildTransitive\..\manager\linux\selenium-manager" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Remove="C:\Users\venka\.nuget\packages\selenium.webdriver\4.16.2\buildTransitive\..\manager\macos\selenium-manager" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Remove="C:\Users\venka\.nuget\packages\selenium.webdriver\4.16.2\buildTransitive\..\manager\windows\selenium-manager.exe" />
   </ItemGroup>
 
 </Project>
