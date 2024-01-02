@@ -177,6 +177,11 @@ jobs:
           loadTestResource: 'BPCalculator-VA1'
           resourceGroup: 'BPCalculator2023'
 
+      - uses: actions/upload-artifact@v2
+        with:
+          name: loadTestResults
+          path: ${{ github.workspace }}/LoadTest
+
     # blue/green
       # - name: swap staging and production slots
         # run: |
