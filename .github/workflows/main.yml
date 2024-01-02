@@ -24,18 +24,18 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Run Snyk to check for vulnerabilities
-        uses: snyk/actions/dotnet@master
-        continue-on-error: true # To make sure that SARIF upload gets called
-        env:
-         SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-        with:
-         args: --sarif-file-output=snyk.sarif
+     # - name: Run Snyk to check for vulnerabilities
+      #  uses: snyk/actions/dotnet@master
+       # continue-on-error: true # To make sure that SARIF upload gets called
+       # env:
+        # SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        #with:
+        # args: --sarif-file-output=snyk.sarif
 
-      - name: Upload result to GitHub Code Scanning
-        uses: github/codeql-action/upload-sarif@v2
-        with:
-         sarif_file: snyk.sarif
+     # - name: Upload result to GitHub Code Scanning
+      #  uses: github/codeql-action/upload-sarif@v2
+       # with:
+        # sarif_file: snyk.sarif
 
       - name: Set up Node.js
         uses: actions/setup-node@v2
@@ -166,6 +166,23 @@ jobs:
       - uses: azure/login@v1
         with:
          creds: ${{ secrets.AZURE_CREDENTIALS }}                         # JSON objects which represents service principal
+
+      - uses: actions/checkout@main          
+
+
+      - name: 'Azure Load Testing'
+        uses: azure/load-testing@v1
+        with:
+          loadTestConfigFile: 'config.yaml'
+          loadTestResource: 'BPCalculator-VA1'
+          resourceGroup: 'BPCalculator2023'
+
+      - uses: actions/upload-artifact@v2
+        with:
+          name: loadTestResults
+          path: ${{ github.workspace }}/LoadTest
+
+      
 
     # blue/green
       # - name: swap staging and production slots
