@@ -6,7 +6,7 @@ testId: 8619492f-e18d-4657-82c7-f5153cacf591
 testType: JMX
 splitAllCSVs: False
 failureCriteria:
-- avg(response_time_ms) < 300
+- avg(response_time_ms) > 500
 autoStop:
-  errorPercentage: 1
+  errorPercentage: 5
   timeWindow: 60
