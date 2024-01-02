@@ -182,8 +182,6 @@ jobs:
           name: loadTestResults
           path: ${{ github.workspace }}/LoadTest
 
-      
-
     # blue/green
       # - name: swap staging and production slots
         # run: |
