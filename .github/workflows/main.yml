@@ -167,6 +167,8 @@ jobs:
         with:
          creds: ${{ secrets.AZURE_CREDENTIALS }}                         # JSON objects which represents service principal
 
+      - uses: actions/checkout@main          
+
 
       - name: 'Azure Load Testing'
         uses: azure/load-testing@v1
