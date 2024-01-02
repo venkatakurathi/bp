@@ -167,6 +167,14 @@ jobs:
         with:
          creds: ${{ secrets.AZURE_CREDENTIALS }}                         # JSON objects which represents service principal
 
+
+      - name: 'Azure Load Testing'
+        uses: azure/load-testing@v1
+        with:
+          loadTestConfigFile: 'config.yaml'
+          loadTestResource: 'BPCalculator-VA1'
+          resourceGroup: 'BPCalculator2023'
+
     # blue/green
       # - name: swap staging and production slots
         # run: |
