@@ -1,0 +1,12 @@
+displayName: BPCalculator_5Vu_Loadtest
+testPlan: url_test.jmx
+description: Baselining
+engineInstances: 1
+testId: 8619492f-e18d-4657-82c7-f5153cacf591
+testType: JMX
+splitAllCSVs: False
+failureCriteria:
+- avg(response_time_ms) < 300
+autoStop:
+  errorPercentage: 1
+  timeWindow: 60
