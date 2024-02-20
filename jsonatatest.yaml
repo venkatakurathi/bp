@@ -1,0 +1,77 @@
+---
+apiVersion: scaffolder.backstage.io/v1beta3
+kind: Template
+metadata:
+  name: CreateVaultPRforAuth
+  title: CreateVaultPR for Auth
+  description: CreateVaultPR for Auth [WIP]
+  tags:
+    - vault
+spec:
+  owner: devops
+  type: service
+  # Edit the template parameters below to see how they will render in the scaffolder form UI
+  parameters:
+   - title: Fill in some steps
+     required:
+      - name
+     properties:
+      name:
+        title: Name
+        type: string
+        description: Unique name of the component
+  steps:
+    - id: fetch-repo
+      name: Fetch repo
+      action: fetch:plain
+      input:
+        url: "https://github.com/venkatakurathi/bp"
+
+    - id: move-manifest-to-workbench
+      name: Move files to a workbench location
+      action: fs:rename
+      input:
+        files:
+          - from: "./_auth.json"
+            to: "./workbench-folder/_auth.json"
+
+    - action: debug:log
+      id: list-directory-post-move
+      name: List Directory Post Move
+      input:
+        listWorkspace: true
+
+    - id: jsonata
+      name: Parse File
+      action: roadiehq:utils:jsonata:json:transform
+      input:
+        path: ./workbench-folder/_auth.json
+        expression: >
+          $ ~> | $ | {"venkat-testing/*": { "capabilities":["read","list"]}}|
+
+    - id: create
+      name: Create file
+      action: roadiehq:utils:fs:write
+      input:
+        path: ./workbench-folder/_auth.json
+        content: ${{ steps.jsonata.output.result }}
+
+
+    - id: publish
+      name: Publish
+      action: publish:github:pull-request
+      input:
+        sourcePath: ./workbench-folder/
+        targetPath: ./
+        repoUrl: 'github.com?repo=bp&owner=venkatakurathi'
+        title: "PR Title"
+        branchName: "branch name"
+        description: "description"
+        update: true
+        removeSourceBranch: true
+
+    - action: debug:log
+      id: list-directory-post-publish
+      name: List directory post publish
+      input:
+        listWorkspace: true
